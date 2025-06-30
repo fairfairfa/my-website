@@ -11,20 +11,24 @@
       box-sizing: border-box;
     }
     body {
-      background-color: black;
+      background-color: rgb(255, 255, 255);
       font-family: sans-serif;
     }
     section {
       width: 100%;
+      text-align: center; /* ทำให้ content อยู่กึ่งกลาง */
+      margin: 0 auto;
     }
     .section-img {
       display: block;
       width: 100%;
       height: auto;
+      max-width: 100%;
+      margin: 0 auto;
     }
     .scroll-buttons {
       position: fixed;
-      bottom:20px;
+      bottom: 20px;
       right: 20px;
       z-index: 9999;
       display: flex;
@@ -45,11 +49,20 @@
       padding: 0;
       transition: background-color 0.3s, opacity 0.3s;
       color: white;
+      font-size: 20px;
+      font-weight: bold;
+      user-select: none;
     }
     .scroll-buttons button:hover:not(:disabled), .phone-button:hover {
       background-color: rgba(0, 0, 0, 0.9);
     }
     .scroll-buttons button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    /* เพิ่มให้ปุ่ม zoom in/out disable จางเหมือนกัน */
+    #zoom-in:disabled,
+    #zoom-out:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
@@ -119,9 +132,12 @@
 
   <div class="scroll-buttons">
     <button id="scroll-up"><div class="up-arrow"></div></button>
+
+    <button id="zoom-in" title="ขยาย +">+</button>
+    <button id="zoom-out" title="ย่อ -">−</button>
+
     <button id="scroll-down"><div class="down-arrow"></div></button>
 
-    <!-- ปุ่มโทรศัพท์แบบ button -->
     <button id="phone-btn" class="phone-button" title="โทรหาเรา">
       <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.36 11.36 0 003.55.57 1 1 0 011 1v3.58a1 1 0 01-1 1A18 18 0 013 6a1 1 0 011-1h3.58a1 1 0 011 1 11.36 11.36 0 00.57 3.55 1 1 0 01-.21 1.11l-2.2 2.13z"/>
@@ -176,17 +192,14 @@
       updateButtons();
     });
 
-    // เรียก updateButtons ตอนเริ่มโหลดเพื่อปิดปุ่มขึ้นตอนแรก
     updateButtons();
 
-    // แสดงกล่องข้อความทันที
     showHint();
 
     function showHint() {
       const hint = document.getElementById('popupHint');
       hint.classList.add('show');
 
-      // ซ่อนอัตโนมัติหลัง 20 วินาที
       setTimeout(() => {
         hideHint();
       }, 20000);
@@ -197,7 +210,6 @@
       hint.classList.remove('show');
     }
 
-    // ฟังก์ชันยืนยันโทรศัพท์ พร้อมแยกมือถือกับคอม
     document.getElementById('phone-btn').addEventListener('click', () => {
       const phoneNumber = '0623974291';
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -212,6 +224,84 @@
         }
       }
     });
+
+    // Zoom config
+let zoomLevel = 1.0;
+const zoomStep = 0.1;
+const zoomMin = 0.3;
+const zoomMax = 1.0; // เปลี่ยนจาก 2 → 1.0
+
+const btnZoomIn = document.getElementById('zoom-in');
+const btnZoomOut = document.getElementById('zoom-out');
+
+function updateZoomButtons() {
+  btnZoomOut.disabled = zoomLevel <= zoomMin;
+  btnZoomIn.disabled = zoomLevel >= zoomMax;
+}
+
+function applyZoom() {
+  const viewportCenterY = window.scrollY + window.innerHeight / 2;
+  const viewportWidth = window.innerWidth;
+
+  let totalHeightBefore = 0;
+  sections.forEach(section => {
+    totalHeightBefore += section.clientHeight;
+  });
+
+  sections.forEach(section => {
+    const img = section.querySelector('img');
+
+    if (!img.complete) {
+      img.onload = () => applyZoom();
+      return;
+    }
+
+    const baseRatio = img.naturalHeight / img.naturalWidth;
+    const finalWidth = viewportWidth * zoomLevel;
+    const finalHeight = finalWidth * baseRatio;
+
+    img.style.width = `${finalWidth}px`;
+    img.style.height = `${finalHeight}px`;
+
+    section.style.height = `${finalHeight}px`;
+    section.style.maxWidth = `${finalWidth}px`;
+    section.style.margin = '0 auto';
+    section.style.textAlign = 'center';
+  });
+
+  let totalHeightAfter = 0;
+  sections.forEach(section => {
+    totalHeightAfter += section.clientHeight;
+  });
+
+  const ratio = viewportCenterY / totalHeightBefore;
+  const newScrollY = totalHeightAfter * ratio;
+
+  updateZoomButtons();
+
+  window.scrollTo({
+    top: newScrollY - window.innerHeight / 2,
+    behavior: 'auto'
+  });
+}
+
+btnZoomIn.addEventListener('click', () => {
+  if (zoomLevel < zoomMax) {
+    zoomLevel = Math.min(zoomLevel + zoomStep, zoomMax);
+    applyZoom();
+  }
+});
+
+btnZoomOut.addEventListener('click', () => {
+  if (zoomLevel > zoomMin) {
+    zoomLevel = Math.max(zoomLevel - zoomStep, zoomMin);
+    applyZoom();
+  }
+});
+
+updateZoomButtons();
+
+
   </script>
 
 </body>
