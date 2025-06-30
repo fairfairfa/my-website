@@ -11,12 +11,12 @@
       box-sizing: border-box;
     }
     body {
-      background-color: rgb(255, 255, 255);
+      background-color: #fff;
       font-family: sans-serif;
     }
     section {
       width: 100%;
-      text-align: center; /* ทำให้ content อยู่กึ่งกลาง */
+      text-align: center;
       margin: 0 auto;
     }
     .section-img {
@@ -26,6 +26,8 @@
       max-width: 100%;
       margin: 0 auto;
     }
+
+    /* ปุ่ม scroll และ zoom ล่างขวา */
     .scroll-buttons {
       position: fixed;
       bottom: 20px;
@@ -36,7 +38,17 @@
       gap: 8px;
       align-items: center;
     }
-    .scroll-buttons button, .phone-button {
+
+    /* ปุ่มโทร มุมบนขวา */
+    .phone-top {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+    }
+
+    .scroll-buttons button,
+    .phone-button {
       width: 40px;
       height: 40px;
       border-radius: 6px;
@@ -53,19 +65,19 @@
       font-weight: bold;
       user-select: none;
     }
-    .scroll-buttons button:hover:not(:disabled), .phone-button:hover {
+
+    .scroll-buttons button:hover:not(:disabled),
+    .phone-button:hover {
       background-color: rgba(0, 0, 0, 0.9);
     }
-    .scroll-buttons button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    /* เพิ่มให้ปุ่ม zoom in/out disable จางเหมือนกัน */
+
+    .scroll-buttons button:disabled,
     #zoom-in:disabled,
     #zoom-out:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
+
     .up-arrow, .down-arrow {
       width: 0;
       height: 0;
@@ -74,21 +86,26 @@
       border-bottom: 14px solid white;
       transition: border-color 0.3s;
     }
+
     .down-arrow {
       border-bottom: none;
       border-top: 14px solid white;
     }
+
     .scroll-buttons button:hover:not(:disabled) .up-arrow {
       border-bottom-color: #ccc;
     }
+
     .scroll-buttons button:hover:not(:disabled) .down-arrow {
       border-top-color: #ccc;
     }
+
     .phone-icon {
       width: 20px;
       height: 20px;
       fill: white;
     }
+
     .popup-hint {
       position: fixed;
       bottom: 70px;
@@ -104,10 +121,12 @@
       pointer-events: none;
       max-width: 220px;
     }
+
     .popup-hint.show {
       opacity: 1;
       pointer-events: auto;
     }
+
     .popup-hint .close-btn {
       float: right;
       margin-left: 10px;
@@ -120,24 +139,27 @@
 </head>
 <body>
 
-  <section id="section1"><img class="section-img" src="รูป/1.jpg" alt="Section 1" /></section>
-  <section id="section2"><img class="section-img" src="รูป/2.jpg" alt="Section 2" /></section>
-  <section id="section3"><img class="section-img" src="รูป/3.jpg" alt="Section 3" /></section>
-  <section id="section3.5"><img class="section-img" src="รูป/3.5.jpg" alt="Section 3.5" /></section>
-  <section id="section4"><img class="section-img" src="รูป/4.jpg" alt="Section 4" /></section>
-  <section id="section5"><img class="section-img" src="รูป/5.jpg" alt="Section 5" /></section>
-  <section id="section6"><img class="section-img" src="รูป/6.jpg" alt="Section 6" /></section>
-  <section id="section7"><img class="section-img" src="รูป/7.jpg" alt="Section 7" /></section>
-  <section id="section8"><img class="section-img" src="รูป/8.jpg" alt="Section 8" /></section>
+  <!-- Sections -->
+  <section><img class="section-img" src="รูป/1.jpg" alt="Section 1" /></section>
+  <section><img class="section-img" src="รูป/2.jpg" alt="Section 2" /></section>
+  <section><img class="section-img" src="รูป/3.jpg" alt="Section 3" /></section>
+  <section><img class="section-img" src="รูป/3.5.jpg" alt="Section 3.5" /></section>
+  <section><img class="section-img" src="รูป/4.jpg" alt="Section 4" /></section>
+  <section><img class="section-img" src="รูป/5.jpg" alt="Section 5" /></section>
+  <section><img class="section-img" src="รูป/6.jpg" alt="Section 6" /></section>
+  <section><img class="section-img" src="รูป/7.jpg" alt="Section 7" /></section>
+  <section><img class="section-img" src="รูป/8.jpg" alt="Section 8" /></section>
 
+  <!-- ปุ่ม scroll และ zoom -->
   <div class="scroll-buttons">
     <button id="scroll-up"><div class="up-arrow"></div></button>
-
     <button id="zoom-in" title="ขยาย +">+</button>
     <button id="zoom-out" title="ย่อ -">−</button>
-
     <button id="scroll-down"><div class="down-arrow"></div></button>
+  </div>
 
+  <!-- ปุ่มโทร แยกไว้ด้านบนขวา -->
+  <div class="phone-top">
     <button id="phone-btn" class="phone-button" title="โทรหาเรา">
       <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.36 11.36 0 003.55.57 1 1 0 011 1v3.58a1 1 0 01-1 1A18 18 0 013 6a1 1 0 011-1h3.58a1 1 0 011 1 11.36 11.36 0 00.57 3.55 1 1 0 01-.21 1.11l-2.2 2.13z"/>
@@ -145,6 +167,7 @@
     </button>
   </div>
 
+  <!-- Hint popup -->
   <div class="popup-hint" id="popupHint">
     <span class="close-btn" onclick="hideHint()">&times;</span>
     กดปุ่มเพื่อไปยังผลงานต่อไป
@@ -155,11 +178,8 @@
     let currentIndex = 0;
 
     function updateButtons() {
-      const btnUp = document.getElementById('scroll-up');
-      const btnDown = document.getElementById('scroll-down');
-
-      btnUp.disabled = currentIndex === 0;
-      btnDown.disabled = currentIndex === sections.length - 1;
+      document.getElementById('scroll-up').disabled = currentIndex === 0;
+      document.getElementById('scroll-down').disabled = currentIndex === sections.length - 1;
     }
 
     function scrollToSection(index) {
@@ -170,17 +190,11 @@
       }
     }
 
-    document.getElementById('scroll-up').addEventListener('click', () => {
-      scrollToSection(currentIndex - 1);
-    });
-
-    document.getElementById('scroll-down').addEventListener('click', () => {
-      scrollToSection(currentIndex + 1);
-    });
+    document.getElementById('scroll-up').addEventListener('click', () => scrollToSection(currentIndex - 1));
+    document.getElementById('scroll-down').addEventListener('click', () => scrollToSection(currentIndex + 1));
 
     window.addEventListener('scroll', () => {
-      let closest = 0;
-      let closestDistance = Infinity;
+      let closest = 0, closestDistance = Infinity;
       sections.forEach((sec, i) => {
         const distance = Math.abs(sec.getBoundingClientRect().top);
         if (distance < closestDistance) {
@@ -192,30 +206,24 @@
       updateButtons();
     });
 
-    updateButtons();
-
-    showHint();
-
     function showHint() {
       const hint = document.getElementById('popupHint');
       hint.classList.add('show');
-
-      setTimeout(() => {
-        hideHint();
-      }, 20000);
+      setTimeout(() => hideHint(), 20000);
     }
 
     function hideHint() {
-      const hint = document.getElementById('popupHint');
-      hint.classList.remove('show');
+      document.getElementById('popupHint').classList.remove('show');
     }
 
+    showHint();
+    updateButtons();
+
+    // ปุ่มโทร
     document.getElementById('phone-btn').addEventListener('click', () => {
       const phoneNumber = '0623974291';
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
       const confirmed = confirm('ยืนยันการโทรหาเจ้าของผลงานหรือไม่?');
-
       if (confirmed) {
         if (isMobile) {
           window.location.href = `tel:${phoneNumber}`;
@@ -225,83 +233,76 @@
       }
     });
 
-    // Zoom config
-let zoomLevel = 1.0;
-const zoomStep = 0.1;
-const zoomMin = 0.3;
-const zoomMax = 1.0; // เปลี่ยนจาก 2 → 1.0
+    // Zoom
+    let zoomLevel = 1.0;
+    const zoomStep = 0.1;
+    const zoomMin = 0.3;
+    const zoomMax = 1.0;
 
-const btnZoomIn = document.getElementById('zoom-in');
-const btnZoomOut = document.getElementById('zoom-out');
+    const btnZoomIn = document.getElementById('zoom-in');
+    const btnZoomOut = document.getElementById('zoom-out');
 
-function updateZoomButtons() {
-  btnZoomOut.disabled = zoomLevel <= zoomMin;
-  btnZoomIn.disabled = zoomLevel >= zoomMax;
-}
-
-function applyZoom() {
-  const viewportCenterY = window.scrollY + window.innerHeight / 2;
-  const viewportWidth = window.innerWidth;
-
-  let totalHeightBefore = 0;
-  sections.forEach(section => {
-    totalHeightBefore += section.clientHeight;
-  });
-
-  sections.forEach(section => {
-    const img = section.querySelector('img');
-
-    if (!img.complete) {
-      img.onload = () => applyZoom();
-      return;
+    function updateZoomButtons() {
+      btnZoomOut.disabled = zoomLevel <= zoomMin;
+      btnZoomIn.disabled = zoomLevel >= zoomMax;
     }
 
-    const baseRatio = img.naturalHeight / img.naturalWidth;
-    const finalWidth = viewportWidth * zoomLevel;
-    const finalHeight = finalWidth * baseRatio;
+    function applyZoom() {
+      const viewportCenterY = window.scrollY + window.innerHeight / 2;
+      const viewportWidth = window.innerWidth;
 
-    img.style.width = `${finalWidth}px`;
-    img.style.height = `${finalHeight}px`;
+      let totalHeightBefore = 0;
+      sections.forEach(section => totalHeightBefore += section.clientHeight);
 
-    section.style.height = `${finalHeight}px`;
-    section.style.maxWidth = `${finalWidth}px`;
-    section.style.margin = '0 auto';
-    section.style.textAlign = 'center';
-  });
+      sections.forEach(section => {
+        const img = section.querySelector('img');
+        if (!img.complete) {
+          img.onload = () => applyZoom();
+          return;
+        }
 
-  let totalHeightAfter = 0;
-  sections.forEach(section => {
-    totalHeightAfter += section.clientHeight;
-  });
+        const baseRatio = img.naturalHeight / img.naturalWidth;
+        const finalWidth = viewportWidth * zoomLevel;
+        const finalHeight = finalWidth * baseRatio;
 
-  const ratio = viewportCenterY / totalHeightBefore;
-  const newScrollY = totalHeightAfter * ratio;
+        img.style.width = `${finalWidth}px`;
+        img.style.height = `${finalHeight}px`;
 
-  updateZoomButtons();
+        section.style.height = `${finalHeight}px`;
+        section.style.maxWidth = `${finalWidth}px`;
+        section.style.margin = '0 auto';
+        section.style.textAlign = 'center';
+      });
 
-  window.scrollTo({
-    top: newScrollY - window.innerHeight / 2,
-    behavior: 'auto'
-  });
-}
+      let totalHeightAfter = 0;
+      sections.forEach(section => totalHeightAfter += section.clientHeight);
 
-btnZoomIn.addEventListener('click', () => {
-  if (zoomLevel < zoomMax) {
-    zoomLevel = Math.min(zoomLevel + zoomStep, zoomMax);
-    applyZoom();
-  }
-});
+      const ratio = viewportCenterY / totalHeightBefore;
+      const newScrollY = totalHeightAfter * ratio;
 
-btnZoomOut.addEventListener('click', () => {
-  if (zoomLevel > zoomMin) {
-    zoomLevel = Math.max(zoomLevel - zoomStep, zoomMin);
-    applyZoom();
-  }
-});
+      updateZoomButtons();
 
-updateZoomButtons();
+      window.scrollTo({
+        top: newScrollY - window.innerHeight / 2,
+        behavior: 'auto'
+      });
+    }
 
+    btnZoomIn.addEventListener('click', () => {
+      if (zoomLevel < zoomMax) {
+        zoomLevel = Math.min(zoomLevel + zoomStep, zoomMax);
+        applyZoom();
+      }
+    });
 
+    btnZoomOut.addEventListener('click', () => {
+      if (zoomLevel > zoomMin) {
+        zoomLevel = Math.max(zoomLevel - zoomStep, zoomMin);
+        applyZoom();
+      }
+    });
+
+    updateZoomButtons();
   </script>
 
 </body>
